@@ -1,3 +1,56 @@
-<p>
-  progress works!
-</p>
+
+
+
+<div class="row"> 
+  <div class="col-12">
+      <div class="card">
+          <div class="card-body">
+
+            <h3 class="card-title">Barra de progreso</h3>
+
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" [attr.aria-valuenow]="progreso1" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" [style.width]="progreso1 + '%'"></div>
+              </div>
+
+              <hr>
+
+              <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" [attr.aria-valuenow]="progreso2" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" [style.width]="progreso2 + '%'"></div>
+               </div>
+             
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<div class="row"> 
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body"> 
+               
+    <!-- Si escribo [leyenda] asi quiere decir q lo estoy haciendo dsd una variable, en este caso
+    lo escribimos sin parentesis rectos porq le pasamos el strint literal nada mas
+    'progreso' lo ponemos con llaves rectas para q sea un numero sino lo toma como string.
+    llamamos al eventEmiter del incrementador.component.ts 'cambioValor' y siempre se le pasa ( $event ) a una funcion q declaramos en progress.component.ts o el codigo directo
+    como en este caso porq es un renglon solo. -->
+                <app-incrementador (cambioValor)="progreso1 = $event" leyenda="Progress azul" [progreso]="progreso1"></app-incrementador>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+  
+                <app-incrementador (cambioValor)="progreso2 = $event" leyenda="Progress verde" [progreso]="progreso2"></app-incrementador>
+               
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+
