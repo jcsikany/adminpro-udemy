@@ -1,0 +1,107 @@
+import { Injectable } from '@angular/core';
+import { Usuario } from '../../models/usuario.model';
+import { HttpClient } from '@angular/common/http'; // Ademas de importarlo aca tmb tengo q hacer el import en el service.module.ts del 'HttpClientModule'
+import { URL_SERVICIOS } from '../../config/config';
+import { Router } from '@angular/router';
+
+import 'rxjs/add/operator/map'; // Esto es una mejor practica para importar el map que hacer rxjs/Rx porq asi importamos solo el map y no toda la libreria.
+
+
+@Injectable()
+export class UsuarioService {
+
+  usuario: Usuario;
+  token: string;
+
+  // Tengo q injectar HttpClient para poder hacer las peticiones http
+  constructor(public http: HttpClient, public router:Router) {
+    this.cargarStorage();
+   }
+
+   estaLogueado() {
+     return ( this.token.length > 5 )?true : false;
+   }
+
+   //Vamos a crear un usuario de tipo Usuario, este 'Usuario' es en base al 'usuario.model.ts'
+   crearUsuario( usuario: Usuario){
+
+    // Creamos la ruta, 'URL_SERVICIOS' es una variable q traemos de config/config q es "http://localhost:3000"
+    let url = URL_SERVICIOS + '/usuario';
+
+    // voy a regresar un observador aqui al q nos vamos a poder suscribir
+    return this.http.post( url, usuario )
+                .map( (resp:any) => {
+
+                  swal('Usuario creado', usuario.email, 'success');
+                  return resp.usuario;
+                })
+   }
+
+   cargarStorage() {
+     if( localStorage.getItem('token')){
+       this.token = localStorage.getItem('token');
+       this.usuario = JSON.parse( localStorage.getItem('usuario'));
+     }else{
+       this.token = '';
+       this.usuario = null;
+     }
+   } 
+
+   guardarStorage( id:string, token: string, usuario: Usuario){
+
+    localStorage.setItem('id', id );
+    localStorage.setItem('token', token );
+    localStorage.setItem( 'usuario', JSON.stringify( usuario ) );
+
+    this.usuario = usuario;
+    this.token = token;
+
+   }
+
+
+   logout(){
+     this.usuario = null;
+     this.token = '';
+
+     localStorage.removeItem('token');
+     localStorage.removeItem('usuario');
+
+     this.router.navigate(['/login']);
+
+   }
+
+
+
+   loginGoogle ( token: string){
+
+    let url = URL_SERVICIOS + '/login/google';
+
+    return this.http.post( url, { token })
+            .map( (resp:any) => {
+              this.guardarStorage( resp.id, resp.token, resp.usuario )
+              return true;
+            });
+   }   
+
+
+   login( usuario: Usuario, recuerdame: boolean = false ){
+
+    if ( recuerdame ){
+      localStorage.setItem('email', usuario.email);
+    }else {
+      localStorage.removeItem('email');
+    }
+     
+    let url = URL_SERVICIOS + '/login';
+    return this.http.post( url, usuario )
+                  .map( (resp: any) => {
+
+                    this.guardarStorage( resp.id, resp.token, resp.usuario )
+
+                    return true; // Esto es como decir, se logueo? si(true), pero podemos devolver(return) lo q sea.
+
+                  })
+
+
+   }
+}

@@ -4,45 +4,62 @@
     <section id="wrapper" class="login-register login-sidebar" style="background-image:url(../assets/images/background/login-register.jpg);">
       <div class="login-box card">
           <div class="card-body">
-              <form class="form-horizontal form-material" id="loginform" action="index.html">
+              <!-- Para poder conectarnos con la 'forma' en el register.component.ts hacemos [formGroup]="forma"
+                    y para q esto funcione tenemos q importar el ReactiveFormsModule en el app.module o el modulo q este el register.components.ts
+                 y en cada input ponemos formControlName="algo" y name="algo"
+                Hacemos el (ngSubmit)="registrarUsuario()" para q cuando hagamos click en el boton "resistrarme se ejecute esa funcion, siempre y cuando el boton sea del tipo(type=) 'submit'"
+                Con ngNativeValidate dejamos activo los mensaje de alerta nativos del Explorador.-->                    
+            <form ngNativeValidate [formGroup]="forma" (ngSubmit)="registrarUsuario()" class="form-horizontal form-material" id="loginform" action="index.html">
                   <a href="javascript:void(0)" class="text-center db"><img src="../assets/images/logo-icon.png" alt="Home" /><br/><img src="../assets/images/logo-text.png" alt="Home" /></a>
                   <h3 class="box-title m-t-40 m-b-0">Registrarse</h3><small>Cree una nueva cuenta</small>
                   <div class="form-group m-t-20">
                       <div class="col-xs-12">
-                          <input class="form-control" type="text" required="" placeholder="Nombre">
+                          <input formControlName="nombre" name="nombre" class="form-control" type="text" required placeholder="Nombre">
                       </div>
                   </div>
                   <div class="form-group ">
                       <div class="col-xs-12">
-                          <input class="form-control" type="text" required="" placeholder="Email">
+                          <input formControlName="email" name="email" class="form-control" type="email" required placeholder="Email">
                       </div>
                   </div>
                   <div class="form-group ">
                       <div class="col-xs-12">
-                          <input class="form-control" type="password" required="" placeholder="Contraseña">
+                          <input formControlName="password" name="password" class="form-control" type="password" required placeholder="Contraseña">
                       </div>
                   </div>
                   <div class="form-group">
                       <div class="col-xs-12">
-                          <input class="form-control" type="password" required="" placeholder="Confirmar Contraseña">
+                          <input formControlName="password2" name="password2" class="form-control" type="password" required placeholder="Confirmar Contraseña">
                       </div>
                   </div>
+                  <!-- con forma.errors podemos saber los posibles errores en el forms, para este caso podemos capturar si sonIguales es true
+                    el signo (?) es porq puede ser q falle
+                   otra cosa que validamos es si el formulario esta pristine, o sea si no se a tocado ese formulario.
+                    o sea si la forma ah sido tocada tmb va a aparecer el mensaje "pristine. boolean. True if user has not interacted with the form yet." -->
+                  <div class="form-group" *ngIf="forma['errors']?.sonIguales && !forma.pristine"> 
+                        <p class="text-danger">
+                            Las contraseñas deben ser iguales
+                        </p>
+                  </div> 
+
+                  
+
                   <div class="form-group row">
                       <div class="col-md-12">
                           <div class="checkbox checkbox-primary p-t-0">
-                              <input id="checkbox-signup" type="checkbox">
+                              <input formControlName="condiciones" name="condiciones" id="checkbox-signup" type="checkbox">
                               <label for="checkbox-signup"> Estoy de acuerdo con los <a href="#">Términos</a></label>
                           </div>
                       </div>
                   </div>
                   <div class="form-group text-center m-t-20">
                       <div class="col-xs-12">
-                          <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Loguearse</button>
+                          <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Registrarse</button>
                       </div>
                   </div>
                   <div class="form-group m-b-0">
                       <div class="col-sm-12 text-center">
-                          <p>¿Ya tienes una cuenta? <a href="pages-login-2.html" class="text-info m-l-5"><b>Ingresar</b></a></p>
+                          <p>¿Ya tienes una cuenta? <a routerLink="/login" class="text-info m-l-5"><b>Ingresar</b></a></p>
                       </div>
                   </div>
               </form>

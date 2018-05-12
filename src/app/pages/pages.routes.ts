@@ -8,12 +8,15 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 
+import { LoginGuardGuard } from '../services/guards/login-guard.guard';
+
 // a los componentes le agregamos un nuevo parametro q se llama data, alli adentro podemos agregar lo q queramos tener como informacion
 // esto lo vamos a usar para mostrar el titulo en el breadcrumbs donde dice BlankPage
 const pagesRoutes: Routes = [
     {
          path: '',
       component: PagesComponent,
+      canActivate: [ LoginGuardGuard ],
      children: [
         { path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' } },   
         { path: 'progress', component: ProgressComponent, data: { titulo: 'ProgressBars' } },
