@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(public _usuarioService: UsuarioService) {
 
-    this.usuario = this._usuarioService.usuario;
+    this.usuario = this._usuarioService.usuario; 
 
    }
 
