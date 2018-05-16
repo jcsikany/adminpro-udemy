@@ -153,7 +153,7 @@ export class UsuarioService {
 
     buscarUsuarios( termino: string ){
 
-      let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
+      let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino; 
 
       return this.http.get( url )
                     .map( (resp:any) => resp.usuarios );
