@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http'; // Ademas de importarlo aca t
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
 
+import * as swal from 'sweetalert';
+
 import { Observable } from 'rxjs/Observable'; //Importamos el Observable 
 import 'rxjs/add/operator/map'; // Esto es una mejor practica para importar el map que hacer rxjs/Rx porq asi importamos solo el map y no toda la libreria.
 import 'rxjs/add/operator/catch'; //Importamos el operador catch, para manejar los errores.
@@ -22,6 +24,32 @@ export class UsuarioService {
   constructor(public http: HttpClient, public router:Router, public _subirArchivoService: SubirArchivoService) {
     this.cargarStorage();
    }
+
+   renuevaToken() {
+
+    let url = URL_SERVICIOS + '/login/renuevatoken';
+    url += '?token=' + this.token;
+
+    return this.http.get( url )
+                  .map( (resp:any) => {
+
+                    this.token = resp.token;
+                    localStorage.setItem('token', this.token);
+                    console.log('Token Renovado');
+
+                    return true;
+
+                  })
+                  .catch( err => {
+                    
+                    this.router.navigate(['/login']);
+                    swal('No se pudo renovar token', 'No fue posible renovar token', 'error' );
+                    return Observable.throw( err );
+
+                  });
+
+   }
+
 
    estaLogueado() {
      return ( this.token.length > 5 )?true : false;

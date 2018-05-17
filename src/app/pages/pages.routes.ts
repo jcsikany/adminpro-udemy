@@ -9,7 +9,7 @@ import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 
 import { LoginGuardGuard } from '../services/guards/login-guard.guard';
-import { AdminGuard } from '../services/service.index';
+import { AdminGuard, VerificaTokenGuard } from '../services/service.index';
 import { ProfileComponent } from './profile/profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { HospitalesComponent } from './hospitales/hospitales.component';
@@ -21,12 +21,13 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
 // a los componentes le agregamos un nuevo parametro q se llama data, alli adentro podemos agregar lo q queramos tener como informacion
 // esto lo vamos a usar para mostrar el titulo en el breadcrumbs donde dice BlankPage
 const pagesRoutes: Routes = [
-    {
-         path: '',
-      component: PagesComponent,
-      canActivate: [ LoginGuardGuard ],
-     children: [
-        { path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' } },   
+    
+        {
+             path: 'dashboard', 
+             component: DashboardComponent, 
+             canActivate: [ VerificaTokenGuard ],
+             data: { titulo: 'Dashboard' }
+        },   
         { path: 'progress', component: ProgressComponent, data: { titulo: 'ProgressBars' } },
         { path: 'graficas1', component: Graficas1Component, data: { titulo: 'Gráficas' } },
         { path: 'promesas', component: PromesasComponent, data: { titulo: 'Promesas' } },
@@ -46,8 +47,8 @@ const pagesRoutes: Routes = [
         { path: 'medicos', component: MedicosComponent, data: { titulo: 'Mantenimiento de Medicos' } },
         { path: 'medico/:id', component: MedicoComponent, data: { titulo: 'Actualizar Médico' } },
         { path: '', redirectTo:'/dashboard', pathMatch: 'full' }
-     ] 
-    }
+      
+    
 ];
 
 //El forRoot se usa cuando es la ruta principal pero como estas son rutas q estan dentro de otras rutas
